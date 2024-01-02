@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<head>
+    <title>Simplified Enigma Machine</title>
+<style>
+
+   @font-face {
+     font-family: 'Minisystem';
+     src: url('1.otf');
+   }
+        body {
+            background-color: black;
+      background-size: cover;
+      background-repeat: no-repeat;
+            color: orange;
+                font-family: 'Minisystem';
+
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+background-color: transparent;
+color:orange;
+        }
+
+        label {
+            font-size: 18px;
+            margin-top: 20px;
+background-color: transparent;
+color:orange;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: black;
+            border: none;
+            color: red;
+            cursor: pointer;
+            margin-top: 20px;
+background-color: transparent;
+color:orange;
+        }
+
+        button:hover {
+            background-color: green;
+        }
+
+        #outputText {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        function encrypt() {
+            var inputText = document.getElementById("inputText").value;
+            var encodedText = "";
+            var rotorMappings = getRotorMappings();
+            var selectedRotor = getSelectedRotor();
+
+            for (var i = 0; i < inputText.length; i++) {
+                var char = inputText.charAt(i);
+                var encodedChar = char;
+
+                for (var j = 0; j < rotorMappings.length; j++) {
+                    var rotorMapping = rotorMappings[j];
+                    var index = rotorMapping.indexOf(encodedChar.toUpperCase());
+
+                    if (index !== -1) {
+                        encodedChar = rotorMapping.charAt((index + 1) % 26);
+                        break;
+                    }
+                }
+
+                encodedText += encodedChar;
+            }
+
+            document.getElementById("outputText").textContent = encodedText;
+        }
+
+        function decrypt() {
+            var inputText = document.getElementById("inputText").value;
+            var decodedText = "";
+            var rotorMappings = getRotorMappings();
+            var selectedRotor = getSelectedRotor();
+
+            for (var i = 0; i < inputText.length; i++) {
+                var char = inputText.charAt(i);
+                var decodedChar = char;
+
+                for (var j = 0; j < rotorMappings.length; j++) {
+                    var rotorMapping = rotorMappings[j];
+                    var index = rotorMapping.indexOf(decodedChar.toUpperCase());
+
+                    if (index !== -1) {
+                        decodedChar
+= rotorMapping.charAt((index - 1 + 26) % 26);
+                        break;
+                    }
+                }
+
+                decodedText += decodedChar;
+            }
+
+            document.getElementById("outputText").textContent = decodedText;
+        }
+
+        function getRotorMappings() {
+            var rotorMappings = [
+                "EKMFLGDQVZNTOWYHXUSPAIBRCJ", // Rotor I
+                "AJDKSIRUXBLHWTMCQGZNPYFVOE", // Rotor II
+                "BDFHJLCPRTXVZNYEIWGAKMUSQO"  // Rotor III
+            ];
+
+            return rotorMappings;
+        }
+
+        function getSelectedRotor() {
+            var rotorDropdown = document.getElementById("rotorDropdown");
+            var selectedRotorIndex = rotorDropdown.selectedIndex;
+            var rotorMappings = getRotorMappings();
+
+            return rotorMappings[selectedRotorIndex];
+        }
+    </script>
+</head>
+<body>
+    <h1>Simplified Enigma Machine</h1>
+    <input type="text" id="inputText" placeholder="Enter text to encode/decode">
+    <br>
+    <label for="rotorDropdown">Select Rotor:</label>
+    <select id="rotorDropdown">
+        <option value="0">Rotor I</option>
+        <option value="1">Rotor II</option>
+        <option value="2">Rotor III</option>
+    </select>
+    <br>
+    <button onclick="encrypt()">Encrypt</button>
+    <button onclick="decrypt()">Decrypt</button>
+    <div id="outputText"></div>
+</body>
+
